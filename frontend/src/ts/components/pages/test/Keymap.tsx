@@ -18,6 +18,7 @@ import { cn } from "../../../utils/cn";
 import { applyReducedMotion, isMacLike } from "../../../utils/misc";
 import { Anime } from "../../common/anime";
 import { Button } from "../../common/Button";
+import { getFingerInfo, HandGuide } from "./finger-guide";
 import { convertLayoutToKeymap } from "./keymapConverter";
 import { KeyboardDefinition, KeyDefinition } from "./keymapLayouts";
 
@@ -86,155 +87,50 @@ function Keyboard(props: { displayName: string; layoutData: LayoutObject }) {
           showFirstRow={showFirstRow()}
           flashState={getKeymapFlashState}
         />
-        <FingerGuide />
+        <FingerPlacementGuide />
       </Show>
     </div>
   );
 }
 
-function FingerGuide() {
+function FingerPlacementGuide() {
   const nextKey = () => getKeymapHighlightKey()?.toLowerCase();
-  const nextFingerInfo = () => {
+  const fingerInfo = () => {
     const key = nextKey();
-    return key !== undefined && key !== "" ? getFingerInfo(key) : undefined;
+    return key === undefined ? undefined : getFingerInfo(key);
   };
   const keyLabel = () => {
     const key = nextKey();
-    if (key === undefined || key === "") return undefined;
-    if (key === " ") return "Space";
-    return key.length === 1 ? key.toUpperCase() : key;
+    if (key === undefined) return undefined;
+    return key === " " ? "Space" : key.toUpperCase();
   };
-  const fingerName = () => nextFingerInfo()?.finger;
-  const activeHand = () => nextFingerInfo()?.hand;
+  const finger = () => fingerInfo()?.finger;
+  const hand = () => fingerInfo()?.hand;
 
   return (
-    <div class="mt-4 grid w-full max-w-xl gap-3 rounded bg-sub-alt p-4 text-xs">
+    <div class="grid w-full max-w-xl gap-3 rounded bg-sub-alt p-4 text-xs">
       <div class="text-center text-text">
         <Show
           when={keyLabel() !== undefined}
-          fallback={<>Rest fingers on A S D F and J K L ;, then start typing</>}
+          fallback={<>Rest fingers on A S D F and J K L ;</>}
         >
           <>
             Press <strong class="text-main">{keyLabel()}</strong> with your{" "}
-            <Show
-              when={nextFingerInfo()}
-              fallback={<strong class="text-main">assigned finger</strong>}
-            >
-              <strong class="text-main">
-                {fingerName() === "thumb" ? "thumb" : `${fingerName()} finger`}
-              </strong>
-            </Show>
-            <Show when={activeHand() !== undefined && activeHand() !== "both"}>
-              {` (${activeHand()} hand)`}
+            <strong class="text-main">
+              {finger() === "thumb" ? "thumb" : `${finger()} finger`}
+            </strong>
+            <Show when={hand() !== undefined && hand() !== "both"}>
+              {` (${hand()} hand)`}
             </Show>
           </>
         </Show>
       </div>
       <div class="grid grid-cols-2 gap-4">
-        <HandGuide
-          side="left"
-          activeFinger={fingerName()}
-          active={activeHand()}
-        />
-        <HandGuide
-          side="right"
-          activeFinger={fingerName()}
-          active={activeHand()}
-        />
+        <HandGuide side="left" activeFinger={finger()} active={hand()} />
+        <HandGuide side="right" activeFinger={finger()} active={hand()} />
       </div>
       <div class="text-center text-sub">
-        Home row: A S D F · J K L ; · use either thumb for Space
-      </div>
-    </div>
-  );
-}
-
-type Finger = "pinky" | "ring" | "middle" | "index" | "thumb";
-type HandSide = "left" | "right";
-
-type FingerInfo = { finger: Finger; hand: HandSide | "both" };
-
-function getFingerInfo(key: string): FingerInfo | undefined {
-  if (key === " ") return { finger: "thumb", hand: "both" };
-
-  const mappings: [Finger, HandSide, string][] = [
-    ["pinky", "left", "1qaz`"],
-    ["ring", "left", "2wsx"],
-    ["middle", "left", "3edc"],
-    ["index", "left", "45rtfgvb"],
-    ["index", "right", "67yuhjnm"],
-    ["middle", "right", "8ik,"],
-    ["ring", "right", "9ol."],
-    ["pinky", "right", "0p-=[]\\;'/"],
-  ];
-  const directMatch = mappings.find(([, , keys]) => keys.includes(key));
-  if (directMatch) {
-    return { finger: directMatch[0], hand: directMatch[1] };
-  }
-
-  const shiftedKeys: Record<string, FingerInfo> = {
-    "!": { finger: "pinky", hand: "left" },
-    "@": { finger: "ring", hand: "left" },
-    "#": { finger: "middle", hand: "left" },
-    $: { finger: "index", hand: "left" },
-    "%": { finger: "index", hand: "left" },
-    "^": { finger: "index", hand: "right" },
-    "&": { finger: "index", hand: "right" },
-    "*": { finger: "middle", hand: "right" },
-    "(": { finger: "ring", hand: "right" },
-    ")": { finger: "pinky", hand: "right" },
-    _: { finger: "pinky", hand: "right" },
-    "+": { finger: "pinky", hand: "right" },
-    "{": { finger: "pinky", hand: "right" },
-    "}": { finger: "pinky", hand: "right" },
-    "|": { finger: "pinky", hand: "right" },
-    ":": { finger: "pinky", hand: "right" },
-    '"': { finger: "pinky", hand: "right" },
-    "<": { finger: "middle", hand: "right" },
-    ">": { finger: "ring", hand: "right" },
-    "?": { finger: "pinky", hand: "right" },
-    "~": { finger: "pinky", hand: "left" },
-  };
-  return shiftedKeys[key];
-}
-
-function HandGuide(props: {
-  side: HandSide;
-  activeFinger: Finger | undefined;
-  active: HandSide | "both" | undefined;
-}) {
-  const fingers: { name: Finger; height: string }[] = [
-    { name: "pinky", height: "h-7" },
-    { name: "ring", height: "h-9" },
-    { name: "middle", height: "h-11" },
-    { name: "index", height: "h-9" },
-    { name: "thumb", height: "h-6" },
-  ];
-  return (
-    <div class="grid justify-items-center gap-2">
-      <div class="text-sub">{props.side} hand</div>
-      <div class="flex h-14 items-end gap-1">
-        <For each={props.side === "left" ? fingers : [...fingers].reverse()}>
-          {(finger) => {
-            const isActive =
-              (props.active === props.side || props.active === "both") &&
-              props.activeFinger === finger.name;
-            return (
-              <div
-                class={cn(
-                  "w-5 rounded-full border border-sub",
-                  finger.height,
-                  finger.name === "thumb" && "rotate-[-35deg]",
-                  isActive ? "border-main bg-main" : "bg-bg",
-                )}
-                aria-label={`${props.side} ${finger.name} finger${isActive ? ", use this finger" : ""}`}
-              ></div>
-            );
-          }}
-        </For>
-      </div>
-      <div class="text-center text-sub">
-        {props.side === "left" ? "A S D F" : "J K L ;"}
+        Feel the bumps on F and J · use either thumb for Space
       </div>
     </div>
   );

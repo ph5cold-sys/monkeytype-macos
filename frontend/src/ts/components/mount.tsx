@@ -19,6 +19,7 @@ import { MyProfile } from "./pages/account/MyProfile";
 import { FriendsPage } from "./pages/connections/FriendsPage";
 import { LeaderboardPage } from "./pages/leaderboard/LeaderboardPage";
 import { LoginPage } from "./pages/login/LoginPage";
+import { PracticePage } from "./pages/practice/PracticePage";
 import { ProfilePage } from "./pages/profile/ProfilePage";
 import { ProfileSearchPage } from "./pages/profile/ProfileSearchPage";
 import { SettingsPage } from "./pages/settings/SettingsPage";
@@ -40,6 +41,7 @@ const components: Record<string, () => JSXElement> = {
   footer: () => <Footer />,
   aboutpage: () => <AboutPage />,
   settingspage: () => <SettingsPage />,
+  practicepage: () => <PracticePage />,
   accountpage: () => <AccountPage />,
   loginpage: () => <LoginPage />,
   leaderboardpage: () => <LeaderboardPage />,

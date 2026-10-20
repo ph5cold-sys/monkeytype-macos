@@ -110,6 +110,20 @@ function WebNav(): JSXElement {
       <Button
         variant="text"
         fa={{
+          icon: "fa-dumbbell",
+          fixedWidth: true,
+        }}
+        router-link
+        href="/practice"
+        class={buttonClass()}
+        dataset={{
+          "data-nav-item": "practice",
+        }}
+        balloon={{ text: "finger practice", position: "down" }}
+      />
+      <Button
+        variant="text"
+        fa={{
           icon: "fa-crown",
           fixedWidth: true,
         }}
@@ -285,6 +299,15 @@ function DesktopNav(): JSXElement {
         onClick={() => {
           if (getActivePage() === "test") restartTestEvent.dispatch();
         }}
+      />
+      <Button
+        variant="text"
+        fa={{ icon: "fa-dumbbell", fixedWidth: true }}
+        router-link
+        href="/practice"
+        class={buttonClass()}
+        active={getActivePage() === "practice"}
+        balloon={{ text: "finger practice", position: "down" }}
       />
       <Button
         variant="text"

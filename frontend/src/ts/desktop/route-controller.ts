@@ -12,19 +12,24 @@ import {
 import { qsa, qsr } from "../utils/dom";
 import * as Misc from "../utils/misc";
 
-type DesktopPath = "/" | "/about" | "/settings" | "/account";
+type DesktopPath = "/" | "/about" | "/settings" | "/account" | "/practice";
 
-const pages = new Map<DesktopPath, "test" | "about" | "settings" | "account">([
+const pages = new Map<
+  DesktopPath,
+  "test" | "about" | "settings" | "account" | "practice"
+>([
   ["/", "test"],
   ["/about", "about"],
   ["/settings", "settings"],
   ["/account", "account"],
+  ["/practice", "practice"],
 ] as const);
 
 const pageSelectors = {
   test: ".pageTest",
   about: "#pageAbout",
   settings: "#pageSettings",
+  practice: "#pagePractice",
   account: "#pageAccount",
   "404": "#page404",
 } as const;

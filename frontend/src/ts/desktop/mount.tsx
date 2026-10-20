@@ -8,6 +8,7 @@ import { CommandlineHotkey } from "../components/hotkeys/CommandlineHotkey";
 import { Footer } from "../components/layout/footer/Footer";
 import { Header } from "../components/layout/header/Header";
 import { NotFoundPage } from "../components/pages/404Page";
+import { PracticePage } from "../components/pages/practice/PracticePage";
 import { SettingsPage } from "../components/pages/settings/SettingsPage";
 import { CapsWarning } from "../components/pages/test/CapsWarning";
 import { CompositionDisplay } from "../components/pages/test/CompositionDisplay";
@@ -37,6 +38,7 @@ const components: Record<string, () => JSXElement> = {
   aboutpage: () => <DesktopAboutPage />,
   accountpage: () => <DesktopAccountPage />,
   settingspage: () => <SettingsPage />,
+  practicepage: () => <PracticePage />,
   notfoundpage: () => <NotFoundPage />,
   testconfig: () => <TestConfig />,
   commandlinehotkey: () => <CommandlineHotkey />,
