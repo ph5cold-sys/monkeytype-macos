@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   verify:
-    name: Apple Silicon desktop
+    name: Intel x64 desktop
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v6
@@ -46,15 +46,18 @@ jobs:
 
       - name: Verify native shell
         run: |
-          cargo test --manifest-path desktop/src-tauri/Cargo.toml --target aarch64-apple-darwin
-          cargo clippy --manifest-path desktop/src-tauri/Cargo.toml --target aarch64-apple-darwin -- -D warnings
+          cargo test --manifest-path desktop/src-tauri/Cargo.toml
+          cargo clippy --manifest-path desktop/src-tauri/Cargo.toml -- -D warnings
 
-      - name: Build Apple Silicon app
+      - name: Install Intel Rust target
+        run: rustup target add x86_64-apple-darwin
+
+      - name: Build Intel x64 app
         run: pnpm --dir desktop build
 
       - name: Verify bundle
         run: |
-          APP_PATH="desktop/src-tauri/target/aarch64-apple-darwin/release/bundle/macos/Monkeytype.app"
-          file "$APP_PATH/Contents/MacOS/Monkeytype" | grep -q arm64
+          APP_PATH="desktop/src-tauri/target/x86_64-apple-darwin/release/bundle/macos/Monkeytype.app"
+          file "$APP_PATH/Contents/MacOS/Monkeytype" | grep -q x86_64
           codesign --verify --deep --strict --verbose=2 "$APP_PATH"
           grep -q 'connect-src.*ipc:.*http://ipc.localhost' desktop/src-tauri/tauri.conf.json

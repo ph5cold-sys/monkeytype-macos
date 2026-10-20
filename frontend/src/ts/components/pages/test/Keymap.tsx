@@ -86,8 +86,39 @@ function Keyboard(props: { displayName: string; layoutData: LayoutObject }) {
           showFirstRow={showFirstRow()}
           flashState={getKeymapFlashState}
         />
+        <FingerGuide />
       </Show>
     </div>
+  );
+}
+
+function FingerGuide() {
+  return (
+    <details open class="mt-4 w-full max-w-xl rounded bg-sub-alt p-4 text-xs">
+      <summary class="cursor-pointer text-center text-sub">
+        finger guide — rest fingers on <span class="text-text">A S D F</span>{" "}
+        and <span class="text-text">J K L ;</span>
+      </summary>
+      <div class="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-sub">
+        <div class="grid gap-1">
+          <div class="text-center text-text">left hand</div>
+          <div>pinky: 1 Q A Z</div>
+          <div>ring: 2 W S X</div>
+          <div>middle: 3 E D C</div>
+          <div>index: 4 5 R F V T G B</div>
+        </div>
+        <div class="grid gap-1">
+          <div class="text-center text-text">right hand</div>
+          <div>index: 6 7 Y H N U J M</div>
+          <div>middle: 8 I K ,</div>
+          <div>ring: 9 O L .</div>
+          <div>pinky: 0 P ; / - = [ ] &apos;</div>
+        </div>
+        <div class="col-span-2 text-center">
+          use either thumb for space · feel the bumps on F and J
+        </div>
+      </div>
+    </details>
   );
 }
 

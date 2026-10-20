@@ -1,7 +1,7 @@
 # Monkeytype Desktop for macOS
 
 This directory packages the current Monkeytype frontend as a local-only macOS
-application. It targets Apple Silicon and uses Tauri 2 with the system WKWebView.
+application. It targets Intel x64 Macs and uses Tauri 2 with the system WKWebView.
 
 ## Product boundary
 
@@ -26,11 +26,11 @@ The upstream frontend currently requires Node.js 24 and pnpm.
 pnpm --dir desktop build
 ```
 
-The package script always builds for `aarch64-apple-darwin`. Outputs are written
-under `desktop/src-tauri/target/aarch64-apple-darwin/release/bundle/`.
+The package script always builds for `x86_64-apple-darwin`. Outputs are written
+under `desktop/src-tauri/target/x86_64-apple-darwin/release/bundle/`.
 
-Local builds are ad-hoc signed. Pull requests build and verify an Apple Silicon
-app and DMG on an ARM64 GitHub runner. The WebView content policy blocks remote
+Local builds are ad-hoc signed. Pull requests build and verify an Intel x64 app
+and DMG on a macOS GitHub runner. The WebView content policy blocks remote
 connections, and the desktop build removes accounts, cloud APIs, ads, analytics,
 telemetry, and update checks. Public distribution still requires a Developer ID
 certificate and Apple notarization credentials; do not publish the CI artifact

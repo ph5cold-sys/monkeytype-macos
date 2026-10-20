@@ -6,8 +6,8 @@
   "type": "module",
   "scripts": {
     "dev": "tauri dev",
-    "build": "tauri build --target aarch64-apple-darwin",
-    "check": "cargo check --manifest-path src-tauri/Cargo.toml --target aarch64-apple-darwin",
+    "build": "tauri build --target x86_64-apple-darwin",
+    "check": "cargo check --manifest-path src-tauri/Cargo.toml --target x86_64-apple-darwin",
     "tauri": "tauri"
   },
   "devDependencies": {
